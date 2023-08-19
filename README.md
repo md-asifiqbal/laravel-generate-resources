@@ -7,7 +7,7 @@ Generate Laravel Model, Migration, Service, Controller, Resources with a single 
 You can install this package via Composer:
 
 ```bash
-composer require asif160627/generate-resources
+composer require asif160627/laravel-generate-resources
 
 ```
 
