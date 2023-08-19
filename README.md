@@ -1,4 +1,4 @@
-# Generate Resources Command
+# Laravel Generate Resources
 
 Generate Laravel Model, Migration, Service, Controller, Resources with a single command.
 
