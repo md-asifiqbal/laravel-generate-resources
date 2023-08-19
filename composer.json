@@ -14,5 +14,12 @@
             "email": "asif.ice.pust@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Asif160627\\GenerateResources\\ResourceServiceProvider"
+            ]
+        }
+    }
 }
