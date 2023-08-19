@@ -1,0 +1,76 @@
+
+    public function __construct(protected {{ model }} ${{ model }})
+    {
+        //
+    }
+
+    public function getPaginateData(int $pagination = 20,array $relations = [],array $columns = ['*'])
+    {
+        try {
+            return $this->{{ model }}->with($relations)->select($columns)->latest()->paginate($pagination);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function create(array $data)
+    {
+        try {
+            return $this->{{ model }}->create($data);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function show(string $id,array $relations = [],array $columns = ['*'])
+    {
+        try {
+            return $this->{{ model }}->with($relations)->select($columns)->findOrFail($id);
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function showWhere(string $column,string $value,array $relations = [],array $columns = ['*'])
+    {
+        try {
+            return $this->{{ model }}->with($relations)->select($columns)->where($column,$value)->firstOrFail();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function update(array $data, string $id = null, string $column = null, string $value = null)
+    {
+        try {
+            if ($column && $value)
+                $show = $this->showWhere($column, $value);
+            elseif ($id)
+                $show = $this->show($id);
+            return isset($show) ? $show->update($data) : false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function destroy(string $id = null, string $column = null, string $value = null)
+    {
+        try {
+            if ($column && $value)
+                $show = $this->showWhere($column, $value);
+            elseif ($id)
+                $show = $this->show($id);
+            return isset($show) ? $show->delete() : false;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function datatable(string $search = null, array $relations = [], array $columns = ['*'])
+    {
+        try {
+            return $this->{{ model }}->with($relations)->select($columns)->latest();
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }

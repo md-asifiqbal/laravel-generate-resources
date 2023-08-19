@@ -1,0 +1,18 @@
+{
+    "name": "asif160627/generate-resources",
+    "description": "Generate Laravel Model,Migration,Service,Controller,Resources with single command",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Asif160627\\GenerateResources\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Md. Asif Iqbal",
+            "email": "asif.ice.pust@gmail.com"
+        }
+    ],
+    "require": {}
+}
