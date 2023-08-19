@@ -74,10 +74,12 @@ php artisan test --filter GenerateResourcesCommandTest
 This will run the tests for the generate:resource command and ensure its functionality.
 
 ## Contributing
-If you encounter issues or have suggestions, feel free to create an issue or pull request on GitHub.
+
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a pull request.
 
 ## License
-This package is open-source software licensed under the MIT License.
+
+This package is open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 
 
