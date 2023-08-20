@@ -1,5 +1,5 @@
 {
-    "name": "md-asifiqbal/laravel-generate-resources",
+    "name": "md-asifiqbal/asif-generate-resources",
     "description": "Generate Laravel Model,Migration,Service,Controller,Resources with single command",
     "type": "library",
     "license": "MIT",
