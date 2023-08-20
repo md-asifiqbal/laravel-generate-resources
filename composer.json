@@ -1,5 +1,5 @@
 {
-    "name": "asif160627/generate-resources",
+    "name": "sam-asif/generate-resources",
     "description": "Generate Laravel Model,Migration,Service,Controller,Resources with single command",
     "type": "library",
     "license": "MIT",
@@ -16,10 +16,8 @@
             "email": "asif@pust.ac.bd"
         }
     ],
-    "require": {
-        "php": ">=7.0"
-    },
-    "minimum-stability": "stable",
+    "require": {},
+    "minimum-stability": "dev",
     "extra": {
         "laravel": {
             "providers": [
