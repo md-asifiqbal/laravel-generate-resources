@@ -1,5 +1,5 @@
 {
-    "name": "asif/laravel-10-generate-resources",
+    "name": "sam-asif/laravel-10-generate-resources",
     "description": "Generate Laravel Model,Migration,Service,Controller,Resources with single command",
     "type": "library",
     "license": "MIT",
