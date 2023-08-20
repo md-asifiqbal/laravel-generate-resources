@@ -3,6 +3,8 @@
     "description": "Generate Laravel Model,Migration,Service,Controller,Resources with single command",
     "type": "library",
     "license": "MIT",
+    "keywords": ["laravel","resources","services","controller","model","migration","generate","artisan","command"],
+    "homepage": "https://github.com/md-asifiqbal/laravel-generate-resources",
     "autoload": {
         "psr-4": {
             "Asif160627\\GenerateResources\\": "src/"
@@ -14,7 +16,9 @@
             "email": "asif.ice.pust@gmail.com"
         }
     ],
-    "require": {},
+    "require": {
+        "php": ">=7.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
@@ -23,3 +27,4 @@
         }
     }
 }
+
