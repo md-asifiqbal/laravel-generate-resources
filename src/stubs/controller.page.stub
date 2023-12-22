@@ -1,0 +1,169 @@
+<?php
+
+namespace {{ namespace }};
+
+use {{ rootNamespace }}Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use {{ requestClassNamespace }};
+use {{ serviceClassNamespace }};
+class {{ class }} extends Controller
+{
+    protected $title;
+
+    public function __construct(protected {{ serviceClass }} ${{ serviceClassVariable }}, protected $keyword = '{{ keyword }}')
+    {
+        $this->title = Str::plural($this->keyword);
+        // $this->middleware(['admin.permission:country_index'])->only('index', 'datatable');
+        // $this->middleware(['admin.permission:country_create'])->only('create', 'store');
+        // $this->middleware(['admin.permission:country_edit'])->only('edit', 'update');
+        // $this->middleware(['admin.permission:country_delete'])->only('destroy');
+        // $this->middleware(['admin.permission:country_show'])->only('show');
+        // $this->middleware(['admin.permission:country_status'])->only('status');
+    }
+
+    private function getColumns()
+    {
+        $columns = ['#', 'name', 'status', 'action'];
+
+        return $columns;
+    }
+
+    private function getDataTableColumns()
+    {
+        $columns = ['DT_RowIndex', 'name', 'status', 'action'];
+
+        return $columns;
+    }
+
+    public function index()
+    {
+        $params = [
+            'nav' => $this->title,
+            'pageTitle' => 'All '.$this->title,
+            'tableColumns' => $this->getColumns(),
+            'dataTableColumns' => $this->getDataTableColumns(),
+            'dataTableUrl' => route('admin.{{ routes }}.datatable'),
+            'create' => route('admin.{{ routes }}.create'),
+            'createClass' => 'ajax-click-page',
+            'pagination' => [[20, 50, 100, -1], [20, 50, 100, 'All']],
+        ];
+
+        return view('admin.pages.{{ routes }}.index', $params);
+    }
+
+    public function create()
+    {
+        $params = [
+            'nav' => $this->title,
+            'pageTitle' => __('Create '.$this->keyword),
+            'submitButton' => __('Create'),
+            'submitUrl' => route('admin.{{ routes }}.store'),
+            'edit' => false,
+            'data' => [],
+        ];
+
+        return view('admin.pages.{{ routes }}.create', $params);
+    }
+
+    public function store({{ requestClass }} $request)
+    {
+        try {
+            $inputs = $request->validated();
+            $inputs['image'] = $this->uploadImage($request, 'image', $this->images_dir);
+            $data = $this->{{ serviceClassVariable }}->create($inputs);
+            $this->success(__($this->keyword.' Created Successfully'));
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+        }
+
+        return $this->output();
+    }
+
+    public function show($id)
+    {
+        $data = $this->{{ serviceClassVariable }}->show($id);
+
+        return view('admin.pages.{{ routes }}.show', compact('data'));
+    }
+
+    public function edit($id)
+    {
+        $params = [
+            'nav' => $this->title,
+            'pageTitle' => __('Update '.$this->keyword),
+            'submitButton' => __('Update'),
+            'submitUrl' => route('admin.{{ routes }}.update', $id),
+            'edit' => true,
+            'data' => $this->{{ serviceClassVariable }}->show($id),
+        ];
+
+        return view('admin.pages.{{ routes }}.edit', $params)->render();
+    }
+
+    public function update({{ requestClass }} $request, $id)
+    {
+        try {
+            $data = $this->{{ serviceClassVariable }}->show($id);
+            $inputs = $request->validated();
+            $inputs['image'] = $this->uploadImage($request, 'image', $this->images_dir, null, null, $data->image);
+            $results = $this->{{ serviceClassVariable }}->update($inputs, $data);
+            $this->success(__($this->keyword.' Updated Successfully'));
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+        }
+
+        return $this->output();
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $data = $this->{{ serviceClassVariable }}->delete($id);
+            $this->success(__($this->keyword.' Deleted Successfully'));
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+        }
+
+        return $this->output();
+    }
+
+    public function status($id)
+    {
+        try {
+            $data = $this->{{ serviceClassVariable }}->status($id);
+            $this->success(__($this->keyword.' Status Updated Successfully'));
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+        }
+
+        return $this->output();
+    }
+
+    public function datatable(Request $request)
+    {
+        if ($request->ajax()) {
+            $datas = $this->{{ serviceClassVariable }}->datatable($request->search);
+
+            return \DataTables::of($datas)
+                ->addIndexColumn()
+                ->editColumn('image', function ($data) {
+                    return '<img src="" width="50px">';
+                })
+                ->editColumn('status', function ($data) {
+                    $status = $data->status == 1 ? 'checked' : '';
+                    $disabled = check_permission('country_status') ? '' : 'disabled';
+                    return '<label class="switch s-danger  mb-4 mr-2">
+                    <input ' . $disabled . ' style="font-size:22px;padding:10px;" class="form-check-input status" type="checkbox" id="mySwitch" data-method="patch" name="status" value="' . route('admin.countries.status', $data->id) . '" ' . $status . '> <span class="slider round"></span>
+                  </label>';
+                })
+                ->addColumn('action', function ($data) {
+                    $actionBtn = check_permission('country_show') ? '<a href="' . route('admin.countries.show', $data->id) . '" class="view btn btn-primary btn-sm ajax-click-page">Show</a>' : '';
+                    $actionBtn .= check_permission('country_edit') ? '<a style="margin-left:5px;" href="' . route('admin.countries.edit', $data->id) . '" class="btn btn-success btn-sm ajax-click-page">Edit</a> ' : '';
+                    $actionBtn .= check_permission('country_delete') ? '<a style="margin-left:5px;" href="' . route('admin.countries.destroy', $data->id) . '" class="btn btn-danger btn-sm ajax-delete">Delete</a> ' : '';
+                    return $actionBtn??'';
+                })
+                ->rawColumns(['image', 'action', 'status'])->make(true);
+        }
+    }
+}

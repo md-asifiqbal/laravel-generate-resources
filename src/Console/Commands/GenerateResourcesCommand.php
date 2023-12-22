@@ -4,6 +4,7 @@ namespace Asif160627\GenerateResources\Console\Commands;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Facades\File;
 
 class GenerateResourcesCommand extends GeneratorCommand
 {
@@ -12,7 +13,7 @@ class GenerateResourcesCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'generate:resource {name}';
+    protected $signature = 'generate:resource {name} {--type=page}';
 
     /**
      * The console command description.
@@ -26,7 +27,7 @@ class GenerateResourcesCommand extends GeneratorCommand
      */
     public function handle()
     {
-
+        $type = $this->option('type') ?? 'page';
         $name = $this->argument('name');
         $modelName = Str::studly(class_basename($this->argument('name')));
 
@@ -44,8 +45,19 @@ class GenerateResourcesCommand extends GeneratorCommand
             'name' => "{$name}Request",
         ]);
 
-        $this->call('make:controller', array_filter([
-            'name' => "{$name}Controller"
+        $filename = $type == 'modal' ? 'controller.custom.modal.stub' : 'controller.custom.stub';
+        $sourcePath = $this->getCustomControllerStub();
+        $destinationPath = base_path('vendor\laravel\framework\src\Illuminate\Routing\Console/stubs/' . $filename);
+        if (File::exists($sourcePath)) {
+            File::copy($sourcePath, $destinationPath);
+        }
+
+        $this->call('generate:plain-controller', array_filter([
+            'name' => "{$name}Controller",
+            '--type' => $type == 'modal' ? 'modal' : 'page',
+            '--service' => "{$name}Service",
+            '--requests' => "{$name}Request",
+            '--model' => $modelName,
         ]));
 
         $this->call('make:resource', [
@@ -58,5 +70,14 @@ class GenerateResourcesCommand extends GeneratorCommand
 
     protected function getStub()
     {
+    }
+
+    public function getCustomControllerStub()
+    {
+        $type = $this->option('type') ?? 'page';
+        if ($type == 'modal') {
+            return __DIR__ . '/../../stubs/controller.custom.modal.stub';
+        }
+        return __DIR__ . '/../../stubs/controller.custom.stub';
     }
 }
