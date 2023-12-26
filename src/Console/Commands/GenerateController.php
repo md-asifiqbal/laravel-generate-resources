@@ -83,6 +83,7 @@ class GenerateController extends GeneratorCommand
         $replace['{{ serviceClassVariable }}'] = lcfirst($serviceClass);
         $replace['{{ keyword }}'] = Str::singular(Str::ucfirst($this->option('model')));
         $replace['{{ routes }}'] = Str::plural(Str::lower($this->option('model')));
+        $replace['{{ permission }}'] = Str::lower(Str::singular($this->option('model')));
 
         return str_replace(
             array_keys($replace),

@@ -1,5 +1,5 @@
 
-    public function __construct(protected {{ model }} ${{ model }})
+    public function __construct(protected {{ model }} $model)
     {
         //
     }
@@ -7,7 +7,7 @@
     public function getPaginateData(int $pagination = 20,array $relations = [],array $columns = ['*'])
     {
         try {
-            return $this->{{ model }}->with($relations)->select($columns)->latest()->paginate($pagination);
+            return $this->model->with($relations)->select($columns)->latest()->paginate($pagination);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -16,7 +16,7 @@
     public function create(array $data)
     {
         try {
-            return $this->{{ model }}->create($data);
+            return $this->model->create($data);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -25,7 +25,7 @@
     public function show(string $id,array $relations = [],array $columns = ['*'])
     {
         try {
-            return $this->{{ model }}->with($relations)->select($columns)->findOrFail($id);
+            return $this->model->with($relations)->select($columns)->findOrFail($id);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -34,7 +34,7 @@
     public function showWhere(string $column,string $value,array $relations = [],array $columns = ['*'])
     {
         try {
-            return $this->{{ model }}->with($relations)->select($columns)->where($column,$value)->firstOrFail();
+            return $this->model->with($relations)->select($columns)->where($column,$value)->firstOrFail();
         } catch (\Exception $e) {
             throw $e;
         }
