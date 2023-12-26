@@ -1,0 +1,5 @@
+
+//generate {{ route }}
+Route::resource('{{ route }}', {{ controller }}::class);
+Route::patch('{{ route }}/{id}/status', [{{ controller }}::class, 'status'])->name('{{ route }}.status');
+Route::get('{{ route }}-datatable', [{{ controller }}::class, 'datatable'])->name('{{ route }}.datatable');

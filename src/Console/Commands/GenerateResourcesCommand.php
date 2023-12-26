@@ -45,12 +45,12 @@ class GenerateResourcesCommand extends GeneratorCommand
             'name' => "{$name}Request",
         ]);
 
-        $filename = $type == 'modal' ? 'controller.custom.modal.stub' : 'controller.custom.stub';
-        $sourcePath = $this->getCustomControllerStub();
-        $destinationPath = base_path('vendor\laravel\framework\src\Illuminate\Routing\Console/stubs/' . $filename);
-        if (File::exists($sourcePath)) {
-            File::copy($sourcePath, $destinationPath);
-        }
+        // $filename = $type == 'modal' ? 'controller.custom.modal.stub' : 'controller.custom.stub';
+        // $sourcePath = $this->getCustomControllerStub();
+        // $destinationPath = base_path('vendor\laravel\framework\src\Illuminate\Routing\Console/stubs/' . $filename);
+        // if (File::exists($sourcePath)) {
+        //     File::copy($sourcePath, $destinationPath);
+        // }
 
         $this->call('generate:plain-controller', array_filter([
             'name' => "{$name}Controller",
@@ -59,6 +59,12 @@ class GenerateResourcesCommand extends GeneratorCommand
             '--requests' => "{$name}Request",
             '--model' => $modelName,
         ]));
+
+
+        $this->call('generate:route', [
+            'route' => Str::plural(Str::kebab($modelName)),
+            '--controller' => "{$name}Controller",
+        ]);
 
         $this->call('make:resource', [
             'name' => "{$name}Resource",
