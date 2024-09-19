@@ -49,15 +49,10 @@ class GenerateService extends GeneratorCommand
      */
     protected function getMethodStub(): string
     {
-        // Define the path to the published service-method stub
         $publishedPath = resource_path('views/vendor/generate-resources/stubs/service-method.stub');
-
-        // Check if the custom published service-method stub exists
         if (file_exists($publishedPath)) {
             return $publishedPath;
         }
-
-        // Fallback to the default package service-method stub
         return __DIR__ . '/../../stubs/service-method.stub';
     }
 
