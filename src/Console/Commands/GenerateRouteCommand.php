@@ -47,8 +47,18 @@ class GenerateRouteCommand extends Command
 
     protected function getStub()
     {
+        // Define the path to the published stubs in the application
+        $publishedPath = resource_path('views/vendor/generate-resources/stubs/routes.stub');
+
+        // Check if the custom published stub exists
+        if (file_exists($publishedPath)) {
+            return $publishedPath;
+        }
+
+        // Fall back to the package's default stub if no custom one is found
         return __DIR__ . '/../../stubs/routes.stub';
     }
+
 
     protected function prependToRoutesFile($content, $startPattern, $filePath)
     {

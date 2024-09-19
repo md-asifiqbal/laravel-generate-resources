@@ -144,7 +144,6 @@ class {{ class }} extends Controller
     {
         if ($request->ajax()) {
             $datas = $this->{{ serviceClassVariable }}->datatable($request->search);
-
             return \DataTables::of($datas)
                 ->addIndexColumn()
                 ->editColumn('image', function ($data) {

@@ -31,8 +31,16 @@ class GenerateService extends GeneratorCommand
     /**
      * Get the stub file for the generator.
      */
+    /**
+     * Get the main service stub.
+     */
     protected function getStub(): string
     {
+        $publishedPath = resource_path('views/vendor/generate-resources/stubs/service.stub');
+
+        if (file_exists($publishedPath)) {
+            return $publishedPath;
+        }
         return __DIR__ . '/../../stubs/service.stub';
     }
 
@@ -41,8 +49,18 @@ class GenerateService extends GeneratorCommand
      */
     protected function getMethodStub(): string
     {
+        // Define the path to the published service-method stub
+        $publishedPath = resource_path('views/vendor/generate-resources/stubs/service-method.stub');
+
+        // Check if the custom published service-method stub exists
+        if (file_exists($publishedPath)) {
+            return $publishedPath;
+        }
+
+        // Fallback to the default package service-method stub
         return __DIR__ . '/../../stubs/service-method.stub';
     }
+
 
     /**
      * Get the default namespace for the class.

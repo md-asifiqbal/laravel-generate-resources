@@ -74,16 +74,30 @@ class GenerateResourcesCommand extends GeneratorCommand
 
 
 
-    protected function getStub()
-    {
-    }
+    protected function getStub() {}
 
     public function getCustomControllerStub()
     {
         $type = $this->option('type') ?? 'page';
+
+        // Define the path to the published stubs
+        $publishedPath = resource_path('views/vendor/generate-resources/stubs');
+
+        // Check if the modal stub exists in the published directory first
         if ($type == 'modal') {
+            if (file_exists($publishedPath . '/controller.custom.modal.stub')) {
+                return $publishedPath . '/controller.custom.modal.stub';
+            }
+            // Fall back to the package stub if no custom modal stub is found
             return __DIR__ . '/../../stubs/controller.custom.modal.stub';
         }
+
+        // Check if the default custom stub exists in the published directory
+        if (file_exists($publishedPath . '/controller.custom.stub')) {
+            return $publishedPath . '/controller.custom.stub';
+        }
+
+        // Fall back to the package stub if no custom default stub is found
         return __DIR__ . '/../../stubs/controller.custom.stub';
     }
 }

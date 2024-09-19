@@ -41,10 +41,23 @@ class GenerateController extends GeneratorCommand
      */
     protected function getStub()
     {
+        $publishedPath = resource_path('views/vendor/generate-resources/stubs');
 
+        // Check if a specific stub type was passed
         if ($type = $this->option('type')) {
+            // Use the published stub if it exists, otherwise fall back to the package stub
+            if (file_exists($publishedPath . "/controller.{$type}.stub")) {
+                return $publishedPath . "/controller.{$type}.stub";
+            }
+
             return __DIR__ . "/../../stubs/controller.{$type}.stub";
         }
+
+        // Use the default stub if no type is specified
+        if (file_exists($publishedPath . '/controller.stub')) {
+            return $publishedPath . '/controller.stub';
+        }
+
         return __DIR__ . '/../../stubs/controller.stub';
     }
 
@@ -132,7 +145,9 @@ class GenerateController extends GeneratorCommand
     protected function buildFormRequestReplacements(array $replace, $modelClass)
     {
         [$namespace, $storeRequestClass, $updateRequestClass] = [
-            'Illuminate\\Http', 'Request', 'Request',
+            'Illuminate\\Http',
+            'Request',
+            'Request',
         ];
 
         if ($this->option('requests')) {

@@ -15,7 +15,7 @@ composer require asif160627/laravel-resources-generator
 After installing the package, you can use the generate:resource command to generate the necessary files for a resource:
 
 ```bash
-php artisan generate:resource {name}
+php artisan generate:resource {name} {--type=page|modal}
 
 ```
 
